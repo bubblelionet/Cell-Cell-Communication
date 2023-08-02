@@ -67,28 +67,7 @@ def plot(df):
 data_name = 'PDAC_64630' #LUAD_GSM5702473_TD1
 
 
-
-##########################################################
-if data_name == 'LUAD_GSM5702473_TD1':
-    parser = argparse.ArgumentParser()
-    parser.add_argument( '--data_path', type=str, default='/cluster/projects/schwartzgroup/fatema/data/LUAD/LUAD_GSM5702473_TD1/' , help='The path to dataset') 
-    parser.add_argument( '--embedding_data_path', type=str, default='new_alignment/Embedding_data_ccc_rgcn/' , help='The path to attention') #'/cluster/projects/schwartzgroup/fatema/pancreatic_cancer_visium/210827_A00827_0396_BHJLJTDRXY_Notta_Karen/V10M25-61_D1_PDA_64630_Pa_P_Spatial10x_new/outs/'
-    parser.add_argument( '--data_name', type=str, default='LUAD_GSM5702473_TD1', help='The name of dataset')
-    parser.add_argument( '--model_name', type=str, default='gat_r1_3attr', help='model name')
-    
-    args = parser.parse_args()  	
-#############################################################   
-elif data_name == 'V1_Human_Lymph_Node_spatial':
-    parser = argparse.ArgumentParser()
-    parser.add_argument( '--data_path', type=str, default='/cluster/projects/schwartzgroup/fatema/data/V1_Human_Lymph_Node_spatial/' , help='The path to dataset') 
-    parser.add_argument( '--embedding_data_path', type=str, default='new_alignment/Embedding_data_ccc_rgcn/' , help='The path to attention') #'/cluster/projects/schwartzgroup/fatema/pancreatic_cancer_visium/210827_A00827_0396_BHJLJTDRXY_Notta_Karen/V10M25-61_D1_PDA_64630_Pa_P_Spatial10x_new/outs/'
-    parser.add_argument( '--data_name', type=str, default='V1_Human_Lymph_Node_spatial', help='The name of dataset')
-    parser.add_argument( '--model_name', type=str, default='gat_r1_2attr', help='model name')
-    parser.add_argument( '--slice', type=int, default=0, help='starting index of ligand')
-    args = parser.parse_args()
-
-
-elif data_name == 'PDAC_64630':
+if data_name == 'PDAC_64630':
     parser = argparse.ArgumentParser()
     parser.add_argument( '--data_path', type=str, default='/cluster/projects/schwartzgroup/fatema/pancreatic_cancer_visium/210827_A00827_0396_BHJLJTDRXY_Notta_Karen/V10M25-61_D1_PDA_64630_Pa_P_Spatial10x_new/outs/' , help='The path to dataset') 
     parser.add_argument( '--embedding_data_path', type=str, default='new_alignment/Embedding_data_ccc_rgcn/' , help='The path to attention') #'/cluster/projects/schwartzgroup/fatema/pancreatic_cancer_visium/210827_A00827_0396_BHJLJTDRXY_Notta_Karen/V10M25-61_D1_PDA_64630_Pa_P_Spatial10x_new/outs/'
@@ -97,13 +76,6 @@ elif data_name == 'PDAC_64630':
     #parser.add_argument( '--slice', type=int, default=0, help='starting index of ligand')
     args = parser.parse_args()
 
-
-elif data_name == 'PDAC_140694':
-    parser = argparse.ArgumentParser()
-    parser.add_argument( '--data_path', type=str, default='/cluster/projects/schwartzgroup/fatema/pancreatic_cancer_visium/V10M25-60_C1_PDA_140694_Pa_P_Spatial10x/outs/' , help='The path to dataset') 
-    parser.add_argument( '--embedding_data_path', type=str, default='new_alignment/Embedding_data_ccc_rgcn/' , help='The path to attention') #'/cluster/projects/schwartzgroup/fatema/pancreatic_cancer_visium/210827_A00827_0396_BHJLJTDRXY_Notta_Karen/V10M25-61_D1_PDA_64630_Pa_P_Spatial10x_new/outs/'
-    parser.add_argument( '--data_name', type=str, default='PDAC_140694', help='The name of dataset')
-    args = parser.parse_args()
 
 ####### get the gene id, cell barcode, cell coordinates ######
 
