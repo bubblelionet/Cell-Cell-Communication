@@ -14,6 +14,8 @@ from cdlib import algorithms
 from cdlib import NodeClustering
 import altair as alt
 import sys
+import os
+
 
 sys.path.append("/Users/victoriagao/Documents/MSc/Schwartz_lab/altair-themes/")
 if True:  # In order to bypass isort when saving
@@ -61,7 +63,7 @@ def create_barcode_info(cell_barcodes, coordinates):
     return barcode_info
 
 
-def combine_barcodes(barcode_type, barcode_coordinate_dict):
+def combine_barcodes(barcode_type, barcode_coordinate_dict): # record the type (annotation) of each spot (barcode)
     combined_barcode = {key: [barcode_type[key]] + barcode_coordinate_dict[key] for key in barcode_type if key in barcode_coordinate_dict}
     return combined_barcode
 
@@ -80,8 +82,13 @@ def find_extreme_distances(combined_barcode_list):
     max_distance_barcodes = ()
     min_distance = float('inf')
     closest_barcodes = ()
+    """
+    Calculates euclidean distance between each one spot and every neighboring spots. Outputs max and min distance, useful for find_connected_components function
+    Input: each barcode with their coordinates.
+    Returns: max, min distances and barcodes.
+    """
 
-    for i, dict1 in enumerate(combined_barcode_list):
+    for i, dict1 in enumerate(combined_barcode_list): # Iterate through all pairs of dictionaries and calculate distances - Max and Min
         for j, dict2 in enumerate(combined_barcode_list[i + 1:], start=i + 1):
             distance = euclidean_distance(dict1, dict2)
             if distance > max_distance:
@@ -95,6 +102,11 @@ def find_extreme_distances(combined_barcode_list):
 
 def find_connected_components(combined_barcode_list, proximity_threshold):
     G = nx.Graph()
+    """
+    Given a proximity_threshold, which is the distance between two neighboring spots, create edges between them.
+    Output:
+        filtered_connected_components: list of sets, each set is a tumor 'region'
+    """
     for component in combined_barcode_list:
         G.add_node(component['barcode'], x=component['x'], y=component['y'], type=component['type'])
 
@@ -115,11 +127,12 @@ def save_connected_components(file_path, components):
 
 
 def main():
-    gene_ids_file = "/Users/victoriagao/local_docs/NEST/stored_variables/PDAC_experiments/exp1_C1_gene_ids.txt"
-    coordinates_file = "/Users/victoriagao/local_docs/NEST/stored_variables/PDAC_experiments/exp1_C1_coordinates.npy"
-    cell_barcode_file = '/Users/victoriagao/local_docs/NEST/stored_variables/PDAC_experiments/exp1_C1_cell_barcode.pkl'
+    path_dir = '/Users/victoriagao/local_docs/NEST/stored_variables'
+    gene_ids_file = os.path.join(path_dir, 'PDAC_experiments/exp1_C1_gene_ids.txt')
+    coordinates_file = os.path.join(path_dir, 'PDAC_experiments/exp1_C1_coordinates.npy')
+    cell_barcode_file = os.path.join(path_dir, 'PDAC_experiments/exp1_C1_cell_barcode.pkl')
     pathologist_label_file = '/Users/victoriagao/local_docs/NEST/IX_annotation_artifacts_PDAC64630.csv'
-    output_file = '/Users/victoriagao/local_docs/NEST/stored_variables/exp1_C1_filtered_connected_components.pkl'
+    output_file = os.path.join(path_dir, 'exp1_C1_filtered_connected_components.pkl')
 
     gene_ids = load_gene_ids(gene_ids_file)
     coordinates = load_coordinates(coordinates_file)
@@ -134,9 +147,9 @@ def main():
     combined_barcode = combine_barcodes(barcode_type, barcode_coordinate_dict)
     combined_barcode_list = create_combined_barcode_list(combined_barcode)
 
-    max_distance, max_distance_barcodes, min_distance, closest_barcodes = find_extreme_distances(combined_barcode_list)
+    # max_distance, max_distance_barcodes, min_distance, closest_barcodes = find_extreme_distances(combined_barcode_list)
 
-    filtered_connected_components = find_connected_components(combined_barcode_list, proximity_threshold=200)
+    filtered_connected_components = find_connected_components(combined_barcode_list, proximity_threshold=200) # change proximity threshold if distance between spots are different
 
     for idx, component_set in enumerate(filtered_connected_components, start=1):
         component_types = {component['type'] for barcode in component_set for component in combined_barcode_list if component['barcode'] == barcode}
